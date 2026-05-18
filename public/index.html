@@ -460,6 +460,9 @@
                         <button class="px-3 py-1.5 rounded-full transition-all"
                             :class="currentSort === 'trending' ? 'bg-blue-100 text-blue-700' : 'text-slate-500 hover:bg-slate-100'"
                             @click="setSort('trending')">Trending</button>
+                        <button class="px-3 py-1.5 rounded-full transition-all"
+                            :class="currentSort === 'discover' ? 'bg-amber-100 text-amber-700' : 'text-slate-500 hover:bg-slate-100'"
+                            @click="setSort('discover')">Discover</button>
                         <template x-if="currentFeedId || currentSort !== 'latest'">
                             <button class="ml-2 text-xs text-slate-400 hover:text-slate-600 underline" @click="goHome()">Clear filters</button>
                         </template>

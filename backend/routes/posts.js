@@ -34,6 +34,17 @@ router.get('/', async (req, res) => {
         ORDER BY total_reactions DESC, p.published_at DESC
         LIMIT ${limit} OFFSET ${offset}
       `;
+    } else if (sortBy === 'discover') {
+      const [count] = await sql`SELECT count(*) ${baseJoin} ${whereClause}`;
+      totalCount = parseInt(count.count);
+
+      posts = await sql`
+        SELECT p.*, f.name as feed_name
+        ${baseJoin}
+        ${whereClause}
+        ORDER BY RANDOM()
+        LIMIT ${limit} OFFSET ${offset}
+      `;
     } else if (sortBy === 'trending') {
       const [count] = await sql`SELECT count(*) ${baseJoin} ${whereClause}`;
       totalCount = parseInt(count.count);
