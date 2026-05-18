@@ -2,38 +2,81 @@ const express = require('express');
 const router = express.Router();
 const sql = require('../config/db');
 
-// Get paginated posts
+// Get paginated posts with optional sort and filter
 router.get('/', async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const offset = (page - 1) * limit;
     const feedId = req.query.feedId;
+    const sortBy = req.query.sortBy || 'latest';
 
     let posts;
     let totalCount;
 
-    if (feedId) {
+    const baseJoin = sql`FROM posts p JOIN feeds f ON p.feed_id = f.id`;
+    const whereClause = feedId ? sql`WHERE p.feed_id = ${feedId}` : sql``;
+
+    if (sortBy === 'popular') {
+      const [count] = await sql`SELECT count(*) ${baseJoin} ${whereClause}`;
+      totalCount = parseInt(count.count);
+
       posts = await sql`
-        SELECT p.*, f.name as feed_name 
-        FROM posts p 
-        JOIN feeds f ON p.feed_id = f.id 
-        WHERE p.feed_id = ${feedId}
-        ORDER BY p.published_at DESC 
+        SELECT p.*, f.name as feed_name,
+          COALESCE(r.total_reactions, 0) as total_reactions
+        ${baseJoin}
+        LEFT JOIN (
+          SELECT post_id, count(*) as total_reactions
+          FROM reactions
+          GROUP BY post_id
+        ) r ON r.post_id = p.id
+        ${whereClause}
+        ORDER BY total_reactions DESC, p.published_at DESC
         LIMIT ${limit} OFFSET ${offset}
       `;
-      const [count] = await sql`SELECT count(*) FROM posts WHERE feed_id = ${feedId}`;
+    } else if (sortBy === 'trending') {
+      const [count] = await sql`SELECT count(*) ${baseJoin} ${whereClause}`;
       totalCount = parseInt(count.count);
+
+      posts = await sql`
+        SELECT p.*, f.name as feed_name,
+          COALESCE(r.trending_reactions, 0) as trending_reactions
+        ${baseJoin}
+        LEFT JOIN (
+          SELECT post_id, count(*) as trending_reactions
+          FROM reactions
+          WHERE created_at > NOW() - INTERVAL '7 days'
+          GROUP BY post_id
+        ) r ON r.post_id = p.id
+        ${whereClause}
+        ORDER BY trending_reactions DESC, p.published_at DESC
+        LIMIT ${limit} OFFSET ${offset}
+      `;
     } else {
-      posts = await sql`
-        SELECT p.*, f.name as feed_name 
-        FROM posts p 
-        JOIN feeds f ON p.feed_id = f.id 
-        ORDER BY p.published_at DESC 
-        LIMIT ${limit} OFFSET ${offset}
-      `;
-      const [count] = await sql`SELECT count(*) FROM posts`;
-      totalCount = parseInt(count.count);
+      if (feedId) {
+        const [count] = await sql`SELECT count(*) FROM posts WHERE feed_id = ${feedId}`;
+        totalCount = parseInt(count.count);
+
+        posts = await sql`
+          SELECT p.*, f.name as feed_name 
+          FROM posts p 
+          JOIN feeds f ON p.feed_id = f.id 
+          WHERE p.feed_id = ${feedId}
+          ORDER BY p.published_at DESC 
+          LIMIT ${limit} OFFSET ${offset}
+        `;
+      } else {
+        const [count] = await sql`SELECT count(*) FROM posts`;
+        totalCount = parseInt(count.count);
+
+        posts = await sql`
+          SELECT p.*, f.name as feed_name 
+          FROM posts p 
+          JOIN feeds f ON p.feed_id = f.id 
+          ORDER BY p.published_at DESC 
+          LIMIT ${limit} OFFSET ${offset}
+        `;
+      }
     }
 
     res.json({

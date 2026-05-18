@@ -1,8 +1,8 @@
 const API_BASE_URL = '/api';
 
 window.api = {
-    async getPosts(page = 1, limit = 10, feedId = null) {
-        let url = `${API_BASE_URL}/posts?page=${page}&limit=${limit}`;
+    async getPosts(page = 1, limit = 10, feedId = null, sortBy = 'latest') {
+        let url = `${API_BASE_URL}/posts?page=${page}&limit=${limit}&sortBy=${sortBy}`;
         if (feedId) url += `&feedId=${feedId}`;
         
         const response = await fetch(url);
@@ -19,6 +19,12 @@ window.api = {
     async getSuggestions(query) {
         const response = await fetch(`${API_BASE_URL}/search/suggestions?q=${encodeURIComponent(query)}`);
         if (!response.ok) throw new Error('Failed to get suggestions');
+        return response.json();
+    },
+
+    async getFeeds() {
+        const response = await fetch(`${API_BASE_URL}/feeds`);
+        if (!response.ok) throw new Error('Failed to fetch feeds');
         return response.json();
     },
 

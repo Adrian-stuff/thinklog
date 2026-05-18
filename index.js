@@ -29,11 +29,13 @@ const postsRouter = require('./backend/routes/posts');
 const commentsRouter = require('./backend/routes/comments');
 const reactionsRouter = require('./backend/routes/reactions');
 const searchRouter = require('./backend/routes/search');
+const feedsRouter = require('./backend/routes/feeds');
 
 app.use('/api/posts', postsRouter);
 app.use('/api/comments', commentsRouter);
 app.use('/api/reactions', reactionsRouter);
 app.use('/api/search', searchRouter);
+app.use('/api/feeds', feedsRouter);
 
 // Basic health check
 app.get('/api/health', (req, res) => {

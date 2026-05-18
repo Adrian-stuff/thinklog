@@ -21,3 +21,21 @@ INSERT INTO feeds (name, url, description) VALUES
   ('AWS Machine Learning Blog', 'https://aws.amazon.com/blogs/machine-learning/feed/', 'Practical machine learning tutorials and updates from AWS'),
   ('NVIDIA Developer Blog', 'https://developer.nvidia.com/blog/feed/', 'News and updates for developers from NVIDIA'),
   ('Neptune.ai', 'https://neptune.ai/blog/category/mlops/feed/', 'Practical content on designing, coding, and deploying ML models');
+
+-- More Developer Engineering Blogs
+INSERT INTO feeds (name, url, description) VALUES
+  ('Stack Overflow Blog', 'https://stackoverflow.blog/feed/', 'Insights and advice for developers from the Stack Overflow community'),
+  ('Changelog', 'https://changelog.com/feed', 'Podcasts and articles about software development, open source, and the people behind it'),
+  ('FreeCodeCamp', 'https://www.freecodecamp.org/news/rss/', 'Learn to code with tutorials, guides, and open source projects'),
+  ('LogRocket Blog', 'https://blog.logrocket.com/feed/', 'React, frontend, and full-stack engineering tutorials'),
+  ('Next.js Blog', 'https://nextjs.org/feed.xml', 'Official news and updates from the Next.js team'),
+  ('Cloudflare Blog', 'https://blog.cloudflare.com/rss/', 'Internet performance, security, and developer platform insights'),
+  ('Netflix TechBlog (Medium)', 'https://medium.com/feed/netflix-techblog', 'Engineering and technology from Netflix'),
+  ('Spotify Engineering', 'https://engineering.atspotify.com/feed/', 'How Spotify builds music and audio experiences at scale'),
+  ('Stripe Engineering', 'https://stripe.com/blog/feed.rss', 'Engineering stories from Stripe'),
+  ('Discord Engineering', 'https://discord.com/blog/rss.xml', 'How Discord builds real-time communication at scale'),
+  ('Rust Blog', 'https://blog.rust-lang.org/feed.xml', 'Official blog of the Rust programming language'),
+  ('Go Blog', 'https://go.dev/blog/feed.atom', 'The official blog of the Go programming language'),
+  ('.NET Blog', 'https://devblogs.microsoft.com/dotnet/feed/', 'Official .NET development blog from Microsoft'),
+  ('Docker Blog', 'https://www.docker.com/blog/feed/', 'Containerization news, tutorials, and product updates'),
+  ('Engineering at Meta', 'https://engineering.fb.com/feed/', 'Engineering stories and technical insights from Meta');

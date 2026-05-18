@@ -2,26 +2,48 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('thinkLog', () => ({
         user: null,
         posts: [],
+        feeds: [],
         currentPage: 1,
         totalPages: 1,
         totalPosts: 0,
         currentQuery: '',
-        currentView: 'feed', // 'feed', 'article', or 'about'
+        currentFeedId: '',
+        currentSort: 'latest',
+        currentView: 'feed',
         currentArticle: null,
         isLoading: false,
         isAuthModalOpen: false,
         feedStatus: 'sys_ok',
-        batchReactions: {}, // { postId: { type: count } }
+        batchReactions: {},
 
         async init() {
             window.thinkLogApp = this;
             
-            // Handle browser back/forward buttons
             window.addEventListener('popstate', (e) => {
                 this.handleRouting();
             });
 
+            await this.loadFeeds();
             await this.handleRouting();
+        },
+
+        async loadFeeds() {
+            try {
+                this.feeds = await window.api.getFeeds();
+            } catch (e) {
+                console.warn('Failed to load feeds', e);
+            }
+        },
+
+        setFeed(feedId) {
+            this.currentFeedId = feedId;
+            this.currentQuery = '';
+            this.loadPosts(true);
+        },
+
+        setSort(sortBy) {
+            this.currentSort = sortBy;
+            this.loadPosts(true);
         },
 
         async handleRouting() {
@@ -57,7 +79,7 @@ document.addEventListener('alpine:init', () => {
                 if (this.currentQuery) {
                     response = await window.api.searchPosts(this.currentQuery, this.currentPage);
                 } else {
-                    response = await window.api.getPosts(this.currentPage);
+                    response = await window.api.getPosts(this.currentPage, 10, this.currentFeedId || null, this.currentSort);
                 }
                 
                 if (reset) {
@@ -131,6 +153,8 @@ document.addEventListener('alpine:init', () => {
             this.currentView = 'feed';
             this.currentArticle = null;
             this.currentQuery = '';
+            this.currentFeedId = '';
+            this.currentSort = 'latest';
             if (pushState) {
                 window.history.pushState({}, '', '/');
             }

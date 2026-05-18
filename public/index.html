@@ -437,7 +437,34 @@
 
         <main class="flex-1">
             <!-- Feed View -->
-            <div x-show="currentView === 'feed'">
+            <div x-show="currentView === 'feed'" x-cloak>
+                <div class="flex flex-col gap-3 mb-6">
+                    <div class="flex flex-wrap items-center gap-2 text-sm">
+                        <button class="px-3 py-1.5 rounded-full text-xs font-bold transition-all"
+                            :class="currentFeedId === '' ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
+                            @click="setFeed('')">All</button>
+                        <template x-for="feed in feeds" :key="feed.id">
+                            <button class="px-3 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap"
+                                :class="currentFeedId === feed.id ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
+                                @click="setFeed(feed.id)" x-text="feed.name"></button>
+                        </template>
+                    </div>
+                    <div class="flex items-center gap-1.5 text-xs font-bold">
+                        <span class="text-slate-400 uppercase tracking-widest mr-1">Sort</span>
+                        <button class="px-3 py-1.5 rounded-full transition-all"
+                            :class="currentSort === 'latest' ? 'bg-blue-100 text-blue-700' : 'text-slate-500 hover:bg-slate-100'"
+                            @click="setSort('latest')">Latest</button>
+                        <button class="px-3 py-1.5 rounded-full transition-all"
+                            :class="currentSort === 'popular' ? 'bg-blue-100 text-blue-700' : 'text-slate-500 hover:bg-slate-100'"
+                            @click="setSort('popular')">Popular</button>
+                        <button class="px-3 py-1.5 rounded-full transition-all"
+                            :class="currentSort === 'trending' ? 'bg-blue-100 text-blue-700' : 'text-slate-500 hover:bg-slate-100'"
+                            @click="setSort('trending')">Trending</button>
+                        <template x-if="currentFeedId || currentSort !== 'latest'">
+                            <button class="ml-2 text-xs text-slate-400 hover:text-slate-600 underline" @click="goHome()">Clear filters</button>
+                        </template>
+                    </div>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
                     <template x-for="post in posts" :key="post.id">
                         <article
@@ -445,6 +472,15 @@
                             x-transition:enter-start="opacity-0 translate-y-4"
                             x-transition:enter-end="opacity-100 translate-y-0"
                             class="bg-white border border-slate-200 rounded-xl p-6 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:border-slate-300 flex flex-col group">
+                            <template x-if="post.image_url">
+                                <a href="#" @click.prevent="openArticle(post.id)"
+                                    class="block -mx-6 -mt-6 mb-4 overflow-hidden bg-slate-100">
+                                    <img :src="post.image_url" alt=""
+                                        class="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-500"
+                                        loading="lazy"
+                                        @error="$el.style.display='none'">
+                                </a>
+                            </template>
                             <div class="mb-4">
                                 <a href="#"
                                     class="text-xl font-bold text-slate-900 leading-tight group-hover:text-brand transition-colors"

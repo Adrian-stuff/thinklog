@@ -10,7 +10,7 @@ const extractImage = (item) => {
   }
   
   const content = item['content:encoded'] || item.content || item.description || '';
-  const imgRegex = /<img[^>]+src="([^">]+)"/g;
+  const imgRegex = /<img[^>]+src\s*=\s*["']([^"']+)["']/g;
   const match = imgRegex.exec(content);
   if (match && match[1]) {
     return match[1];
