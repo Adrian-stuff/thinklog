@@ -901,7 +901,9 @@
             </div>
 
             <!-- About View -->
-            <div x-show="currentView === 'about'" x-cloak>
+            <div x-show="currentView === 'about'" x-cloak
+                x-transition:enter.duration.400ms
+                x-transition:leave.duration.200ms>
                 <div class="max-w-3xl mx-auto py-12">
                     <div class="text-center mb-12">
                         <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">About ThinkLog</h2>
@@ -973,7 +975,9 @@
             </div>
 
             <!-- Privacy View -->
-            <div x-show="currentView === 'privacy'" x-cloak>
+            <div x-show="currentView === 'privacy'" x-cloak
+                x-transition:enter.duration.400ms
+                x-transition:leave.duration.200ms>
                 <div class="max-w-3xl mx-auto py-12">
                     <div class="mb-12">
                         <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">Privacy Policy</h2>
@@ -1024,7 +1028,9 @@
             </div>
 
             <!-- Terms View -->
-            <div x-show="currentView === 'terms'" x-cloak>
+            <div x-show="currentView === 'terms'" x-cloak
+                x-transition:enter.duration.400ms
+                x-transition:leave.duration.200ms>
                 <div class="max-w-3xl mx-auto py-12">
                     <div class="mb-12">
                         <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">Terms of Service</h2>
