@@ -63,6 +63,42 @@ router.get('/', async (req, res) => {
         ORDER BY trending_reactions DESC, p.published_at DESC
         LIMIT ${limit} OFFSET ${offset}
       `;
+    } else if (sortBy === 'recommended') {
+      const [count] = await sql`SELECT count(*) ${baseJoin} ${whereClause}`;
+      totalCount = parseInt(count.count);
+
+      const userId = req.query.userId;
+
+      posts = await sql`
+        SELECT p.*, f.name as feed_name,
+          COALESCE(r.total_reactions, 0) as total_reactions
+        ${baseJoin}
+        LEFT JOIN (
+          SELECT post_id, count(*) as total_reactions
+          FROM reactions
+          GROUP BY post_id
+        ) r ON r.post_id = p.id
+        ${whereClause}
+        ORDER BY
+          (CASE
+            WHEN p.published_at > NOW() - INTERVAL '1 day' THEN 10
+            WHEN p.published_at > NOW() - INTERVAL '3 days' THEN 8
+            WHEN p.published_at > NOW() - INTERVAL '7 days' THEN 6
+            WHEN p.published_at > NOW() - INTERVAL '14 days' THEN 4
+            WHEN p.published_at > NOW() - INTERVAL '30 days' THEN 2
+            ELSE 0
+          END) * 0.4
+          + COALESCE(r.total_reactions, 0) * 0.25
+          + RANDOM() * 0.15
+          ${userId ? sql`+ CASE WHEN p.feed_id IN (
+            SELECT DISTINCT po.feed_id
+            FROM reactions r2
+            JOIN posts po ON po.id = r2.post_id
+            WHERE r2.user_id = ${userId}
+          ) THEN 2 ELSE 0 END * 0.2` : sql``}
+        DESC
+        LIMIT ${limit} OFFSET ${offset}
+      `;
     } else {
       if (feedId) {
         const [count] = await sql`SELECT count(*) FROM posts WHERE feed_id = ${feedId}`;

@@ -1,9 +1,10 @@
 const API_BASE_URL = '/api';
 
 window.api = {
-    async getPosts(page = 1, limit = 10, feedId = null, sortBy = 'latest') {
+    async getPosts(page = 1, limit = 10, feedId = null, sortBy = 'recommended', userId = null) {
         let url = `${API_BASE_URL}/posts?page=${page}&limit=${limit}&sortBy=${sortBy}`;
         if (feedId) url += `&feedId=${feedId}`;
+        if (userId) url += `&userId=${userId}`;
         
         const response = await fetch(url);
         if (!response.ok) throw new Error('Failed to fetch posts');

@@ -8,7 +8,7 @@ document.addEventListener('alpine:init', () => {
         totalPosts: 0,
         currentQuery: '',
         currentFeedId: '',
-        currentSort: 'latest',
+        currentSort: 'recommended',
         currentView: 'feed',
         currentArticle: null,
         isLoading: false,
@@ -79,7 +79,7 @@ document.addEventListener('alpine:init', () => {
                 if (this.currentQuery) {
                     response = await window.api.searchPosts(this.currentQuery, this.currentPage);
                 } else {
-                    response = await window.api.getPosts(this.currentPage, 10, this.currentFeedId || null, this.currentSort);
+                    response = await window.api.getPosts(this.currentPage, 10, this.currentFeedId || null, this.currentSort, this.user?.id);
                 }
                 
                 if (reset) {
@@ -154,7 +154,7 @@ document.addEventListener('alpine:init', () => {
             this.currentArticle = null;
             this.currentQuery = '';
             this.currentFeedId = '';
-            this.currentSort = 'latest';
+            this.currentSort = 'recommended';
             if (pushState) {
                 window.history.pushState({}, '', '/');
             }
