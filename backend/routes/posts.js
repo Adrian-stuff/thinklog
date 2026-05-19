@@ -178,23 +178,4 @@ router.get('/:id/details', async (req, res) => {
   }
 });
 
-// Get single post
-router.get('/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const [post] = await sql`
-      SELECT p.*, f.name as feed_name 
-      FROM posts p 
-      JOIN feeds f ON p.feed_id = f.id 
-      WHERE p.id = ${id}
-    `;
-
-    if (!post) return res.status(404).json({ error: 'Post not found' });
-
-    res.json(post);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
 module.exports = router;

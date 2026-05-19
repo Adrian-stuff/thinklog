@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const supabase = require('../config/supabase');
 const sql = require('../config/db');
 
 // Get reaction counts for multiple posts
@@ -47,45 +46,6 @@ router.get('/:postId', async (req, res) => {
     }, {});
 
     res.json(counts);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Toggle reaction
-router.post('/', async (req, res) => {
-  try {
-    const { postId, reactionType } = req.body;
-    
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).json({ error: 'Missing authorization header' });
-    }
-
-    const token = authHeader.replace('Bearer ', '');
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-    
-    if (authError || !user) {
-      return res.status(401).json({ error: 'Invalid token' });
-    }
-
-    // Check if reaction exists
-    const [existing] = await sql`
-      SELECT id FROM reactions 
-      WHERE post_id = ${postId} AND user_id = ${user.id} AND reaction_type = ${reactionType}
-    `;
-
-    if (existing) {
-      await sql`DELETE FROM reactions WHERE id = ${existing.id}`;
-      return res.json({ message: 'Reaction removed', added: false });
-    } else {
-      const [newReaction] = await sql`
-        INSERT INTO reactions (post_id, user_id, reaction_type)
-        VALUES (${postId}, ${user.id}, ${reactionType})
-        RETURNING *
-      `;
-      return res.status(201).json({ message: 'Reaction added', added: true, data: newReaction });
-    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

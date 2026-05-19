@@ -24,6 +24,16 @@ document.addEventListener('alpine:init', () => {
             });
 
             await this.loadFeeds();
+
+            // Resolve auth before initial load so recommended sort
+            // gets the userId for personalized ordering
+            try {
+                const { data: { session } } = await window.supabaseClient.auth.getSession();
+                if (session) {
+                    this.user = session.user;
+                }
+            } catch (e) {}
+
             await this.handleRouting();
         },
 
@@ -54,6 +64,10 @@ document.addEventListener('alpine:init', () => {
             // Path-based routing (clean URLs)
             if (path === '/about' || urlParams.get('view') === 'about') {
                 this.openAbout(false);
+            } else if (path === '/privacy') {
+                this.openPrivacy(false);
+            } else if (path === '/terms') {
+                this.openTerms(false);
             } else if (path === '/article' && articleId) {
                 await this.openArticle(articleId, false);
             } else if (articleId) {
@@ -146,6 +160,22 @@ document.addEventListener('alpine:init', () => {
             this.currentArticle = null;
             if (pushState) {
                 window.history.pushState({ view: 'about' }, '', '/about');
+            }
+        },
+
+        openPrivacy(pushState = true) {
+            this.currentView = 'privacy';
+            this.currentArticle = null;
+            if (pushState) {
+                window.history.pushState({ view: 'privacy' }, '', '/privacy');
+            }
+        },
+
+        openTerms(pushState = true) {
+            this.currentView = 'terms';
+            this.currentArticle = null;
+            if (pushState) {
+                window.history.pushState({ view: 'terms' }, '', '/terms');
             }
         },
 

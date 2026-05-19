@@ -165,16 +165,6 @@
             100% { background-position: -200% 0; }
         }
 
-        @keyframes reaction-pop {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-            100% { transform: scale(1); }
-        }
-
-        .reaction-btn-active {
-            animation: reaction-pop 300ms var(--ease-out-quart);
-        }
-
         @keyframes pulse-dot {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
@@ -644,7 +634,7 @@
                                         x-transition:leave-start="opacity-100 translate-y-0"
                                         x-transition:leave-end="opacity-0 translate-y-2">
                                         <div
-                                            class="flex flex-col gap-3 max-h-60 overflow-y-auto mb-4 pr-2 scrollbar-thin">
+                                            class="flex flex-col gap-3 max-h-60 overflow-y-auto mb-4 pr-2">
                                             <template x-if="isLoading">
                                                 <div class="space-y-3">
                                                     <div class="h-16 bg-slate-100 rounded-lg skeleton"></div>
@@ -918,16 +908,41 @@
                 x-transition:leave-start="opacity-100 translate-y-0"
                 x-transition:leave-end="opacity-0 translate-y-6">
                 <div class="max-w-3xl mx-auto py-12">
-                    <div class="text-center mb-16">
-                        <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">The developer's newsroom.</h2>
-                        <p class="text-xl text-slate-600 leading-relaxed">ThinkLog is a centralized platform designed to help you consume high-quality developer articles without the noise.</p>
+                    <div class="text-center mb-12">
+                        <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">About ThinkLog</h2>
+                        <p class="text-lg text-slate-600 leading-relaxed">A centralized hub for developer-written articles — curated, fast, and built for the curious mind.</p>
                     </div>
 
-                    <div class="space-y-16">
+                    <div class="space-y-12">
+                        <section>
+                            <h3 class="text-2xl font-bold text-slate-900 mb-4">What is ThinkLog?</h3>
+                            <p class="text-slate-600 leading-relaxed">ThinkLog is a centralized news source platform that aggregates articles from top engineering blogs, community platforms, and individual developer sites into one clean, fast feed. Instead of hopping between a dozen bookmarks, you get a single stream of curated content with social features like reactions, comments, search, and sharing.</p>
+                        </section>
+
+                        <section class="bg-slate-50 border border-slate-200 rounded-2xl p-8">
+                            <h3 class="text-2xl font-bold text-slate-900 mb-4">Meet the Team</h3>
+                            <p class="text-slate-500 text-sm font-medium mb-6">Students of Pamantasan ng Lungsod ng Valenzuela — BSIT 2-8</p>
+                            <div class="grid sm:grid-cols-3 gap-6">
+                                <div class="bg-white rounded-xl p-5 border border-slate-100 text-center">
+                                    <div class="w-14 h-14 rounded-full bg-slate-900 text-white flex items-center justify-center text-lg font-bold mx-auto mb-3">AD</div>
+                                    <h4 class="font-bold text-slate-900">De Vera, Adrian</h4>
+                                </div>
+                                <div class="bg-white rounded-xl p-5 border border-slate-100 text-center">
+                                    <div class="w-14 h-14 rounded-full bg-slate-900 text-white flex items-center justify-center text-lg font-bold mx-auto mb-3">JA</div>
+                                    <h4 class="font-bold text-slate-900">Alamer, Justine</h4>
+                                </div>
+                                <div class="bg-white rounded-xl p-5 border border-slate-100 text-center">
+                                    <div class="w-14 h-14 rounded-full bg-slate-900 text-white flex items-center justify-center text-lg font-bold mx-auto mb-3">JE</div>
+                                    <h4 class="font-bold text-slate-900">Espiritu, Jan Marc</h4>
+                                </div>
+                            </div>
+                            <p class="text-slate-500 text-sm mt-6 text-center">This website was created in partial fulfillment of the requirements for our subjects <strong class="text-slate-700">Web Systems and Technologies</strong> and <strong class="text-slate-700">Quantitative Methods</strong>.</p>
+                        </section>
+
                         <section class="grid md:grid-cols-2 gap-10 items-center">
                             <div>
                                 <h3 class="text-2xl font-bold text-slate-900 mb-4">Centralized Intelligence</h3>
-                                <p class="text-slate-600 leading-relaxed">We gather articles from top engineering blogs, community platforms, and individual developer sites into one high-performance terminal-themed feed.</p>
+                                <p class="text-slate-600 leading-relaxed">We gather articles from top engineering blogs, community platforms, and individual developer sites into one high-performance terminal-themed feed. Browse, search, filter, and interact — all in one place.</p>
                             </div>
                             <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 shadow-sm">
                                 <div class="flex flex-col gap-3">
@@ -954,10 +969,125 @@
                             </div>
                         </section>
 
-                        <section class="text-center py-16 border-t border-slate-100">
+                        <section class="text-center py-12 border-t border-slate-100">
                             <h3 class="text-2xl font-bold text-slate-900 mb-6">Ready to dive in?</h3>
-                            <button class="btn btn-primary px-10 py-4 text-base" @click="closeArticle()">Back to Feed</button>
+                            <button class="btn btn-primary px-10 py-4 text-base" @click="goHome()">Back to Feed</button>
                         </section>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Privacy View -->
+            <div x-show="currentView === 'privacy'" x-cloak
+                x-transition:enter="transition ease-out duration-400"
+                x-transition:enter-start="opacity-0 translate-y-6"
+                x-transition:enter-end="opacity-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="opacity-100 translate-y-0"
+                x-transition:leave-end="opacity-0 translate-y-6">
+                <div class="max-w-3xl mx-auto py-12">
+                    <div class="mb-12">
+                        <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">Privacy Policy</h2>
+                        <p class="text-sm text-slate-400">Last updated: May 2026</p>
+                    </div>
+
+                    <div class="space-y-8 text-slate-600 leading-relaxed">
+                        <section>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Information We Collect</h3>
+                            <p>ThinkLog is a read-only aggregator. We do not sell, rent, or share your personal information with third parties. When you sign in, we store only the authentication data provided by Supabase Auth (email, display name, and avatar URL if applicable).</p>
+                        </section>
+
+                        <section>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">How We Use Your Data</h3>
+                            <p>The information we collect is used solely to:</p>
+                            <ul class="list-disc pl-6 mt-3 space-y-1.5">
+                                <li>Authenticate you when you sign in</li>
+                                <li>Associate your comments and reactions with your profile</li>
+                                <li>Improve the platform based on anonymous usage patterns</li>
+                            </ul>
+                        </section>
+
+                        <section>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Cookies & Tracking</h3>
+                            <p>We use essential session cookies for authentication purposes only. We do not use third-party tracking cookies, analytics trackers, or advertising cookies. Supabase Auth may set a session cookie to keep you logged in.</p>
+                        </section>
+
+                        <section>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Data Retention</h3>
+                            <p>You may request deletion of your account and associated data at any time by contacting us. Comments and reactions posted under your account will be anonymized upon account deletion.</p>
+                        </section>
+
+                        <section>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Third-Party Services</h3>
+                            <p>ThinkLog uses Supabase for authentication and database hosting. Their respective privacy policies apply to the data they process on our behalf. We also display content aggregated from third-party RSS feeds — we do not host or control that content.</p>
+                        </section>
+
+                        <section>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Contact</h3>
+                            <p>If you have any questions about this privacy policy, please reach out to the development team through the project repository.</p>
+                        </section>
+                    </div>
+
+                    <div class="text-center pt-12 border-t border-slate-100 mt-12">
+                        <button class="btn btn-outline px-8" @click="goHome()">Back to Feed</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terms View -->
+            <div x-show="currentView === 'terms'" x-cloak
+                x-transition:enter="transition ease-out duration-400"
+                x-transition:enter-start="opacity-0 translate-y-6"
+                x-transition:enter-end="opacity-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="opacity-100 translate-y-0"
+                x-transition:leave-end="opacity-0 translate-y-6">
+                <div class="max-w-3xl mx-auto py-12">
+                    <div class="mb-12">
+                        <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">Terms of Service</h2>
+                        <p class="text-sm text-slate-400">Last updated: May 2026</p>
+                    </div>
+
+                    <div class="space-y-8 text-slate-600 leading-relaxed">
+                        <section>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Acceptance of Terms</h3>
+                            <p>By accessing or using ThinkLog, you agree to be bound by these Terms of Service. If you do not agree, please do not use the platform.</p>
+                        </section>
+
+                        <section>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Educational Purpose</h3>
+                            <p>ThinkLog is a project created for academic purposes by students of Pamantasan ng Lungsod ng Valenzuela. It is provided as-is for educational demonstration. While we strive to keep the platform functional, we make no guarantees of uninterrupted service or data accuracy.</p>
+                        </section>
+
+                        <section>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">User Conduct</h3>
+                            <p>When using ThinkLog, you agree to:</p>
+                            <ul class="list-disc pl-6 mt-3 space-y-1.5">
+                                <li>Provide accurate information during registration</li>
+                                <li>Not use the platform for any unlawful purpose</li>
+                                <li>Not post spam, abusive, or harmful content in comments</li>
+                                <li>Not attempt to circumvent rate limits or security measures</li>
+                            </ul>
+                        </section>
+
+                        <section>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Content Disclaimer</h3>
+                            <p>ThinkLog aggregates content from third-party RSS feeds. We do not claim ownership of any aggregated articles. All rights to the content belong to their respective authors and publishers. If you believe any content infringes on your copyright, please contact us for removal.</p>
+                        </section>
+
+                        <section>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Limitation of Liability</h3>
+                            <p>ThinkLog and its creators shall not be held liable for any damages arising from the use or inability to use the platform. The platform is provided on an "as is" and "as available" basis.</p>
+                        </section>
+
+                        <section>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Changes to Terms</h3>
+                            <p>We reserve the right to modify these terms at any time. Continued use of the platform after changes constitutes acceptance of the new terms.</p>
+                        </section>
+                    </div>
+
+                    <div class="text-center pt-12 border-t border-slate-100 mt-12">
+                        <button class="btn btn-outline px-8" @click="goHome()">Back to Feed</button>
                     </div>
                 </div>
             </div>
@@ -970,8 +1100,8 @@
                 Connection established. <span id="feed-status" class="text-emerald-500 font-semibold" x-text="feedStatus"></span></p>
             <div class="flex gap-6 text-xs font-bold text-slate-400 uppercase tracking-widest">
                 <a href="#" @click.prevent="openAbout()" class="hover:text-slate-900 transition-colors">About</a>
-                <a href="#" class="hover:text-slate-900 transition-colors">Privacy</a>
-                <a href="#" class="hover:text-slate-900 transition-colors">Terms</a>
+                <a href="#" @click.prevent="openPrivacy()" class="hover:text-slate-900 transition-colors">Privacy</a>
+                <a href="#" @click.prevent="openTerms()" class="hover:text-slate-900 transition-colors">Terms</a>
             </div>
         </footer>
     </div>
