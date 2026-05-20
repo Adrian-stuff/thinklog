@@ -12,6 +12,7 @@ document.addEventListener('alpine:init', () => {
         currentView: 'feed',
         currentArticle: null,
         isLoading: false,
+        showAllFeeds: false,
         isAuthModalOpen: false,
         feedStatus: 'sys_ok',
         batchReactions: {},

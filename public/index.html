@@ -586,11 +586,15 @@
                         <button class="px-3 py-1.5 rounded-full text-xs font-bold transition-all"
                             :class="currentFeedId === '' ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
                             @click="setFeed('')">All</button>
-                        <template x-for="feed in feeds" :key="feed.id">
+                        <template x-for="(feed, idx) in feeds" :key="feed.id">
                             <button class="px-3 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap"
                                 :class="currentFeedId === feed.id ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
-                                @click="setFeed(feed.id)" x-text="feed.name"></button>
+                                @click="setFeed(feed.id)" x-text="feed.name"
+                                x-show="showAllFeeds || idx < 4"></button>
                         </template>
+                        <button x-show="!showAllFeeds && feeds.length > 4"
+                            class="px-3 py-1.5 rounded-full text-xs font-bold transition-all bg-slate-100 text-slate-500 hover:bg-slate-200"
+                            @click="showAllFeeds = true">More&hellip;</button>
                     </div>
                     <div class="flex items-center gap-1.5 text-xs font-bold">
                         <span class="text-slate-400 uppercase tracking-widest mr-1">Sort</span>
@@ -994,18 +998,17 @@
                             <div class="grid sm:grid-cols-3 gap-6">
                                 <div class="bg-white rounded-xl p-5 border border-slate-100 text-center">
                                     <img src="./images/devera.jpg" alt="Adrian De Vera"
-                                        class="w-14 h-14 rounded-full object-cover mx-auto mb-3">
+                                        class="w-18 h-18 rounded-full object-cover mx-auto mb-3">
                                     <h4 class="font-bold text-slate-900">De Vera, Adrian</h4>
                                 </div>
                                 <div class="bg-white rounded-xl p-5 border border-slate-100 text-center">
                                     <img src="./images/alamer.jpg" alt="Justine Alamer"
-                                        class="w-14 h-14 rounded-full object-cover mx-auto mb-3">
+                                        class="w-18 h-18 rounded-full object-cover mx-auto mb-3">
                                     <h4 class="font-bold text-slate-900">Alamer, Justine</h4>
                                 </div>
                                 <div class="bg-white rounded-xl p-5 border border-slate-100 text-center">
-                                    <div
-                                        class="w-14 h-14 rounded-full bg-slate-900 text-white flex items-center justify-center text-lg font-bold mx-auto mb-3">
-                                        JE</div>
+                                    <img src="./images/espiritu.jpg" alt="Jan Marc Espiritu"
+                                        class="w-18 h-18 rounded-full object-cover mx-auto mb-3">
                                     <h4 class="font-bold text-slate-900">Espiritu, Jan Marc</h4>
                                 </div>
                             </div>
